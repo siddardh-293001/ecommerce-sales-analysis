@@ -2,6 +2,7 @@
 import pandas as pd
 import streamlit as st
 from src.prepared_data import load_dashboard_data
+from src.exports import sales_csv_file
 from src.config import HOME_COUNTRY, ROOT
 from src import analysis as a, visualizations as v, theme
 st.set_page_config(page_title="E-Commerce Sales Intelligence",layout="wide")
@@ -43,7 +44,7 @@ cols=st.columns(3)+st.columns(2)
 for col,label,key in zip(cols,["Gross Revenue (GBP)","Total Units Sold","Unique Invoices","Identified Customers","Average Revenue per Invoice"],["revenue","units","invoices","identified_customers","mean_invoice_revenue"]):
     col.metric(label,f"{k[key]:,.2f}" if key in ["revenue","mean_invoice_revenue"] else f"{k[key]:,.0f}")
 st.caption(f"Unidentified revenue: {k['unidentified_revenue_pct']:.2f}%. Customer behavior outside these filters is not visible.")
-st.download_button("Download filtered sales CSV",filtered.to_csv(index=False).encode(),"filtered_sales.csv","text/csv")
+st.download_button("Download filtered sales CSV",lambda: sales_csv_file(filtered),"filtered_sales.csv","text/csv",on_click="ignore")
 def show(table,value,title,**kwargs):
     st.plotly_chart(v.interactive(table,value,title,**kwargs),width="stretch")
 tabs=st.tabs(["Sales Overview","Product Performance","Customer Insights","Geographic Insights","Returns and Data Quality"])

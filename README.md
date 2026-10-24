@@ -206,3 +206,6 @@ Render build command: `bash build.sh`. Start command: `bash start.sh`.
 The build downloads the official workbook and runs `prepare_dashboard.py`, which calls the same cleaning pipeline and writes compact Parquet inputs under ignored `data/processed/dashboard/`. These are build artifacts, not a second analytical implementation. PyArrow supplies Parquet storage. The dashboard uses these prepared inputs when available and falls back to the ordinary local pipeline otherwise. No dataset download occurs on browser requests.
 
 Free Render instances can sleep while idle; allow time for the first request to wake the application. No database, credentials or paid instance is required.
+
+
+Hosting memory optimization: prepared Parquet files retain categorical identifiers and load without parallel decompression. Statistical and static-plotting libraries import only when those features are called. CSV downloads are generated on demand through a temporary file in bounded chunks; Streamlit 1.66+ is required for deferred download callbacks. The shared calculations are unchanged. The publication check passed 37 tests, including prepared-data equivalence and filtered CSV serialization.
