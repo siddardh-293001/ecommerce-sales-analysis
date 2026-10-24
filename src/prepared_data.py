@@ -10,13 +10,7 @@ def load_dashboard_data():
     """Read compact shared-pipeline outputs if available, preserving metric inputs."""
     folder = ROOT / 'data' / 'processed' / 'dashboard'
     if (folder/'version.txt').is_file() and (folder/'version.txt').read_text() == PREPARED_VERSION:
-        sales = pd.read_parquet(folder/'sales.parquet')
-        quality = pd.read_parquet(folder/'quality.parquet')
-        # Identifiers stay string-like in public functions; low-cardinality labels remain compact.
-        for frame in [sales,quality]:
-            for column in ['InvoiceNo','StockCode','CustomerID','YearMonth','ExclusionReason']:
-                frame[column] = frame[column].astype('string')
-            # Country categories must not produce unobserved country groups.
-            frame['Country'] = frame.Country.astype('string')
+        sales = pd.read_parquet(folder/'sales.parquet', use_threads=False)
+        quality = pd.read_parquet(folder/'quality.parquet', use_threads=False)
         return sales, quality, json.loads((folder/'report.json').read_text())
     return clean_data(load_data())

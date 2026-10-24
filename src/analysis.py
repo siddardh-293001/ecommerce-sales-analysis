@@ -2,7 +2,6 @@
 import math
 import numpy as np
 import pandas as pd
-from scipy.stats import mannwhitneyu
 from .config import DAYS
 
 def filter_data(data, start=None, end=None, countries=None, products=None, prices=None):
@@ -19,15 +18,15 @@ def filter_data(data, start=None, end=None, countries=None, products=None, price
 
 def invoices(data):
     """Aggregate distinct invoice totals, units and first timestamp."""
-    return data.groupby("InvoiceNo").agg(Revenue=("Revenue","sum"), Units=("Quantity","sum"), Date=("InvoiceDate","min"))
+    return data.groupby("InvoiceNo",observed=True).agg(Revenue=("Revenue","sum"), Units=("Quantity","sum"), Date=("InvoiceDate","min"))
 
 def customers(data):
     """Aggregate identified customers only; count distinct invoices."""
-    return data.dropna(subset=["CustomerID"]).groupby("CustomerID").agg(Revenue=("Revenue","sum"), Frequency=("InvoiceNo","nunique"), LastPurchase=("InvoiceDate","max")).sort_values(["Revenue"],ascending=False)
+    return data.dropna(subset=["CustomerID"]).groupby("CustomerID",observed=True).agg(Revenue=("Revenue","sum"), Frequency=("InvoiceNo","nunique"), LastPurchase=("InvoiceDate","max")).sort_values(["Revenue"],ascending=False)
 
 def products(data, by="Revenue"):
     """Rank merchandise codes with deterministic code-order tie breaking."""
-    table=data.loc[data.IsProduct].groupby("StockCode").agg(Description=("Description","first"),Revenue=("Revenue","sum"),Quantity=("Quantity","sum"))
+    table=data.loc[data.IsProduct].groupby("StockCode",observed=True).agg(Description=("Description","first"),Revenue=("Revenue","sum"),Quantity=("Quantity","sum"))
     table=table.reset_index().sort_values([by,"StockCode"],ascending=[False,True]).set_index("StockCode")
     table["RevenueSharePct"]=table.Revenue/data.Revenue.sum()*100 if data.Revenue.sum() else 0.
     table["RevenueRank"]=table.Revenue.rank(method="min",ascending=False)
@@ -36,7 +35,7 @@ def products(data, by="Revenue"):
 
 def countries(data):
     """Country revenue, invoices, identified customers and invoice average."""
-    table=data.groupby("Country",dropna=False).agg(Revenue=("Revenue","sum"),Invoices=("InvoiceNo","nunique"),Customers=("CustomerID","nunique"))
+    table=data.groupby("Country",dropna=False,observed=True).agg(Revenue=("Revenue","sum"),Invoices=("InvoiceNo","nunique"),Customers=("CustomerID","nunique"))
     table["AverageInvoiceRevenue"]=table.Revenue/table.Invoices
     return table.sort_values("Revenue",ascending=False)
 
@@ -94,8 +93,8 @@ def frequency(data):
 def returns_analysis(quality, sales):
     """Separate cancellation value magnitude from refund/return rates."""
     cancelled=quality.loc[quality.IsCancellation]
-    trend=cancelled.groupby("YearMonth").InvoiceNo.nunique().to_frame("CancellationInvoices")
-    ranking=cancelled.loc[cancelled.IsProduct].groupby("StockCode").agg(Lines=("InvoiceNo","size"),Invoices=("InvoiceNo","nunique")).sort_values("Lines",ascending=False)
+    trend=cancelled.groupby("YearMonth",observed=True).InvoiceNo.nunique().to_frame("CancellationInvoices")
+    ranking=cancelled.loc[cancelled.IsProduct].groupby("StockCode",observed=True).agg(Lines=("InvoiceNo","size"),Invoices=("InvoiceNo","nunique")).sort_values("Lines",ascending=False)
     return {"cancellation_invoices":int(cancelled.InvoiceNo.nunique()),"negative_quantity_records":int(quality.Quantity.lt(0).sum()),
     "cancelled_value_relative_to_gross_pct":float(cancelled.Revenue.abs().sum()/sales.Revenue.sum()*100) if sales.Revenue.sum() else 0.,"trend":trend,"products":ranking}
 
@@ -115,12 +114,13 @@ def rfm(data, reference_date=None):
 
 def segments(data):
     """Customer count and identified-revenue contribution by RFM segment."""
-    table=rfm(data).groupby("Segment").agg(Customers=("Revenue","size"),Revenue=("Revenue","sum"))
+    table=rfm(data).groupby("Segment",observed=True).agg(Customers=("Revenue","size"),Revenue=("Revenue","sum"))
     table["RevenueSharePct"]=table.Revenue/table.Revenue.sum()*100 if table.Revenue.sum() else 0.
     return table
 
 def statistics(data):
     """IQR flags, Spearman correlation, and exploratory observed-day comparison."""
+    from scipy.stats import mannwhitneyu
     inv=invoices(data); result={}
     for column in ["Revenue","Units"]:
         q1,q3=inv[column].quantile([.25,.75]); mask=(inv[column]<q1-1.5*(q3-q1))|(inv[column]>q3+1.5*(q3-q1))

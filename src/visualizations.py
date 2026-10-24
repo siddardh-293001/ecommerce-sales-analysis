@@ -1,10 +1,10 @@
 """Presentation only: callers supply already aggregated chart data."""
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from . import theme
 
 def chart(table, value, title, kind="bar", horizontal=False, cancellation=False):
     """Return a static figure; partial observations use hatching and labels."""
+    import matplotlib.pyplot as plt
     fig,ax=plt.subplots()
     color=theme.NEGATIVE if cancellation else theme.PRIMARY
     labels=table.index.astype(str)
@@ -24,6 +24,7 @@ def chart(table, value, title, kind="bar", horizontal=False, cancellation=False)
 def distribution(values,title,xlabel="Revenue (GBP, logarithmic)"):
     """Return a histogram with a logarithmic revenue axis; input must be positive."""
     import numpy as np
+    import matplotlib.pyplot as plt
     fig,ax=plt.subplots()
     if len(values):
         lo,hi=values.min(),values.max()

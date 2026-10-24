@@ -1,6 +1,4 @@
 """Single source of Monsoon Clay design tokens."""
-import matplotlib as mpl
-import seaborn as sns
 import plotly.graph_objects as go
 import plotly.io as pio
 from matplotlib.colors import LinearSegmentedColormap
@@ -25,6 +23,8 @@ SEQUENTIAL=LinearSegmentedColormap.from_list("clay",[BACKGROUND,SAND,TURMERIC,AC
 DIVERGING=LinearSegmentedColormap.from_list("change",[NEGATIVE,BACKGROUND,PRIMARY])
 def apply_matplotlib_theme():
     """Set consistent chart typography, backgrounds, and grid styling."""
+    import matplotlib as mpl
+    import seaborn as sns
     sns.set_theme(style="whitegrid",palette=CATEGORIES)
     mpl.rcParams.update({"figure.facecolor":BACKGROUND,"axes.facecolor":SURFACE,"text.color":TEXT,"axes.labelcolor":TEXT_MUTED,"xtick.color":TEXT_MUTED,"ytick.color":TEXT_MUTED,"grid.color":GRID,"axes.spines.top":False,"axes.spines.right":False,"figure.figsize":(10,5)})
 def get_plotly_template():
