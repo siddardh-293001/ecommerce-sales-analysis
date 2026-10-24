@@ -1,0 +1,122 @@
+{
+  "kpis": {
+    "revenue": 10642110.804000001,
+    "units": 5572420.0,
+    "invoices": 19960,
+    "identified_customers": 4338,
+    "products": 3907,
+    "mean_invoice_revenue": 533.1718839679359,
+    "median_invoice_revenue": 303.3,
+    "mean_customer_revenue": 2048.6880806823424,
+    "median_customer_revenue": 668.57,
+    "repeat_customer_pct": 65.58321807284463,
+    "unidentified_revenue_pct": 16.490167621073752
+  },
+  "concentration": {
+    "top5_products_pct": 6.020365149357262,
+    "top10_products_pct": 9.088088517519251,
+    "top10_customers_pct": 17.30193616848723,
+    "top20pct_customers_pct": 74.68374942194758
+  },
+  "statistics": {
+    "Revenue_outliers": 1811,
+    "Revenue_outlier_revenue_pct": 47.81953378165559,
+    "Units_outliers": 1445,
+    "Units_outlier_revenue_pct": 38.87671118256851,
+    "units_revenue_spearman": 0.8389840421682713,
+    "mann_whitney_p": 4.968124493926503e-17,
+    "rank_biserial_weekday_minus_weekend": 0.7502745098039216,
+    "weekday_median": 32630.269999999997,
+    "weekend_median": 12357.519999999999,
+    "weekday_days": 255,
+    "weekend_days": 50
+  },
+  "cleaning": {
+    "inspection": {
+      "rows": 541909,
+      "columns": 8,
+      "dtypes": {
+        "InvoiceNo": "string",
+        "StockCode": "string",
+        "Description": "str",
+        "Quantity": "int64",
+        "InvoiceDate": "str",
+        "UnitPrice": "float64",
+        "CustomerID": "string",
+        "Country": "str"
+      },
+      "missing": {
+        "InvoiceNo": 0,
+        "StockCode": 0,
+        "Description": 1454,
+        "Quantity": 0,
+        "InvoiceDate": 0,
+        "UnitPrice": 0,
+        "CustomerID": 135080,
+        "Country": 0
+      },
+      "duplicates": 5268,
+      "unique_invoices": 25900,
+      "unique_customers": 4372,
+      "unique_products": 4070,
+      "date_min": "2010-12-01 08:26:00",
+      "date_max": "2011-12-09 12:50:00",
+      "negative_quantities": 10624,
+      "zero_quantities": 0,
+      "zero_prices": 2515,
+      "negative_prices": 2,
+      "unit_price_distribution": {
+        "count": 541909.0,
+        "mean": 4.611113626088514,
+        "std": 96.75985306117937,
+        "min": -11062.06,
+        "25%": 1.25,
+        "50%": 2.08,
+        "75%": 4.13,
+        "max": 38970.0
+      }
+    },
+    "original_rows": 541909,
+    "duplicates_removed": 5268,
+    "excluded_by_reason": {
+      "cancellation": 9251,
+      "nonpositive_quantity": 1336,
+      "nonpositive_price": 1176
+    },
+    "excluded_rows": 11763,
+    "conversion_failures": {
+      "Quantity": 0,
+      "UnitPrice": 0,
+      "InvoiceDate": 0
+    },
+    "final_rows": 524878,
+    "missing_customer_rows": 132186,
+    "missing_customer_row_share_pct": 25.184138028265618,
+    "missing_customer_revenue_share_pct": 16.490167621073752,
+    "observed_non_product_codes": [
+      "AMAZONFEE",
+      "B",
+      "BANK CHARGES",
+      "C2",
+      "D",
+      "DOT",
+      "M",
+      "PADS",
+      "POST",
+      "S",
+      "gift_0001_10",
+      "gift_0001_20",
+      "gift_0001_30",
+      "gift_0001_40",
+      "gift_0001_50",
+      "m"
+    ],
+    "date_min": "2010-12-01 08:26:00",
+    "date_max": "2011-12-09 12:50:00"
+  },
+  "returns": {
+    "cancellation_invoices": 3836,
+    "negative_quantity_records": 10587,
+    "cancelled_value_relative_to_gross_pct": 8.400398628287013
+  }
+}

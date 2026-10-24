@@ -1,0 +1,22 @@
+/Users/siddhu/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/s8/56wydsq561vgvpmmr5q8y7qm0000gn/T/matplotlib-4e5drxw9 because there was an issue with the default path (/Users/siddhu/.matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+
+Fontconfig error: No writable cache directories
+	/opt/homebrew/var/cache/fontconfig
+	/Users/siddhu/.cache/fontconfig
+	/Users/siddhu/.fontconfig
+Matplotlib is building the font cache; this may take a moment.
+{
+  "revenue": 10642110.804000001,
+  "units": 5572420.0,
+  "invoices": 19960,
+  "identified_customers": 4338,
+  "products": 3907,
+  "mean_invoice_revenue": 533.1718839679359,
+  "median_invoice_revenue": 303.3,
+  "mean_customer_revenue": 2048.6880806823424,
+  "median_customer_revenue": 668.57,
+  "repeat_customer_pct": 65.58321807284463,
+  "unidentified_revenue_pct": 16.490167621073752
+}
+Outputs: /Users/siddhu/Documents/New project/ecommerce-sales-analysis/outputs
