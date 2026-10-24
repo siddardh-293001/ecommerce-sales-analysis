@@ -1,0 +1,1 @@
+"""Shared, reproducible retail analysis."""
